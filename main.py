@@ -5,7 +5,7 @@ from langchain.agents import AgentType
 
 from langchain_openai import ChatOpenAI
 
-from tools import binance_chart_tool, web_search_tool, technical_analysis_tool, coinmarketcap_historical_tool
+from tools import binance_chart_tool, web_search_tool, technical_analysis_tool, coinmarketcap_historical_tool, fear_greed_index_tool
 
 from dotenv import load_dotenv
 
@@ -26,7 +26,8 @@ tools = [
     web_search_tool,
     technical_analysis_tool,
     binance_chart_tool,
-    coinmarketcap_historical_tool
+    coinmarketcap_historical_tool,
+    fear_greed_index_tool
 ]
 
 agent = initialize_agent(
@@ -49,6 +50,7 @@ messages = [
     "Analyze Bitcoin's market situation, including historical trends from the last 60 days. "
     "Focus on significant changes, anomalies, or patterns in market cap, volume, and dominance. "
     "Identify whether we are seeing signs of accumulation, distribution, or a potential reversal. "
+    "Identify key sentiment shifts, periods of extreme greed or fear, and how they correlate with Bitcoin price movements."
     "Do NOT just repeat numbers—provide clear insights backed by data.")
 ]
 

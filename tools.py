@@ -5,7 +5,7 @@ from langchain.tools import StructuredTool
 from langchain.agents import Tool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 
-from providers.coinmarketcup import fetch_coinmarketcap_historical_data
+from providers.coinmarketcup import fetch_coinmarketcap_historical_data, fetch_fear_greed_index
 
 search = GoogleSerperAPIWrapper()
 
@@ -39,6 +39,17 @@ technical_analysis_tool = StructuredTool.from_function(
         "Input should be a JSON object with the following keys: "
         "`symbol` (e.g., BTCUSDT), `interval` (e.g., 1h, 4h), and `limit` (the number of candles to fetch, "
         "which can also be provided as 'num_candles'). The tool returns a brief analysis including RSI and trend."
+    )
+)
+
+fear_greed_index_tool = StructuredTool.from_function(
+    fetch_fear_greed_index,
+    name="fear_greed_index",
+    description=(
+        "Fetches historical Fear & Greed Index data from CoinMarketCap for a given number of past days. "
+        "The index measures market sentiment on a scale from Extreme Fear to Extreme Greed. "
+        "Use this tool to analyze shifts in sentiment and predict potential market reversals. "
+        "Do NOT just list the values—identify patterns, major sentiment shifts, and anomalies."
     )
 )
 

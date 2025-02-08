@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from crypto import analyze_binance_data
+from providers.binance import analyze_binance_data
 
 class AnalysisRequest(BaseModel):
     symbol: str = Field(..., description="The cryptocurrency trading pair, e.g., BTCUSDT.")

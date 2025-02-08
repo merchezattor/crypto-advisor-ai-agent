@@ -113,13 +113,12 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
 
     # Extract relevant Fear & Greed Index values
     historical_data = []
+    
     for entry in data:
-        timestamp = entry.get("timestamp")
+        timestamp = entry.get("timestamp") 
         value = entry.get("value")
         classification = entry.get("value_classification")  # e.g., Extreme Fear, Greed
-
-        # Convert timestamp to a readable format
-        date = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%Y-%m-%d")
+        date = datetime.utcfromtimestamp(int(timestamp)).strftime("%Y-%m-%d")
 
         historical_data.append({
             "date": date,
@@ -128,3 +127,17 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
         })
 
     return {"fear_greed_history": historical_data}
+
+
+if __name__ == "__main__":
+    # global_data = fetch_coinmarketcap_global_data()
+    # print("Global Market Data:")
+    # print(global_data)
+
+    # historical_data = fetch_coinmarketcap_historical_data(days=30)
+    # print("\nHistorical Market Data:")
+    # print(historical_data)
+
+    fear_greed_data = fetch_fear_greed_index(days=30)
+    print("\nFear & Greed Index Data:")
+    print(fear_greed_data)

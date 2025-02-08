@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from crypto import fetch_binance_chart
+from providers.binance import fetch_binance_chart
 
 class ChartRequest(BaseModel):
     symbol: str = Field(description="The cryptocurrency trading pair, e.g., BTCUSDT, ETHUSDT.")
