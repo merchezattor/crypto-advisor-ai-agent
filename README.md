@@ -1,5 +1,5 @@
 
-# Crypto Adviser AI-agent
+# Crypto Advisor AI-agent
 
 🚀 **An advanced AI-powered market analysis agent designed to provide deep insights into Bitcoin (BTC) and the overall cryptocurrency market.** 
 
