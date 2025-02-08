@@ -128,7 +128,3 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
         })
 
     return {"fear_greed_history": historical_data}
-
-if __name__ == "__main__":
-    data = fetch_fear_greed_index()
-    print(data)

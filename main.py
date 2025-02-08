@@ -7,7 +7,10 @@ from langchain_openai import ChatOpenAI
 
 from tools import binance_chart_tool, web_search_tool, technical_analysis_tool, coinmarketcap_historical_tool
 
-# Set API keys
+from dotenv import load_dotenv
+
+load_dotenv()
+
 os.environ["OPEN_AI_API_KEY"] = os.getenv('OPEN_AI_API_KEY')
 os.environ["SERPER_API_KEY"] = os.getenv('SERPER_API_KEY')
 
@@ -20,7 +23,7 @@ llm = ChatOpenAI(
 )
 
 tools = [
-    # web_search_tool,
+    web_search_tool,
     technical_analysis_tool,
     binance_chart_tool,
     coinmarketcap_historical_tool
