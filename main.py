@@ -1,11 +1,8 @@
 import os
+import tools
 
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
-
+from langchain.agents import initialize_agent, AgentType
 from langchain_openai import ChatOpenAI
-
-from tools import binance_chart_tool, web_search_tool, technical_analysis_tool, coinmarketcap_historical_tool, fear_greed_index_tool
 
 from dotenv import load_dotenv
 
@@ -23,11 +20,12 @@ llm = ChatOpenAI(
 )
 
 tools = [
-    web_search_tool,
-    technical_analysis_tool,
-    binance_chart_tool,
-    coinmarketcap_historical_tool,
-    fear_greed_index_tool
+    tools.web_search_tool,
+    tools.technical_analysis_tool,
+    tools.binance_chart_tool,
+    tools.coinmarketcap_historical_tool,
+    tools.fear_greed_index_tool,
+    tools.altcoin_market_tool
 ]
 
 agent = initialize_agent(
@@ -42,6 +40,7 @@ agent = initialize_agent(
         "and key indicators that provide actionable insights. "
         "Do NOT just repeat raw data—always interpret the meaning behind the data. "
         "Focus on what has changed, why it matters, and how it might affect the market."
+        "Give recommendations based on the analysis and provide clear reasoning for your conclusions."
     )
 )
 
@@ -51,6 +50,7 @@ messages = [
     "Focus on significant changes, anomalies, or patterns in market cap, volume, and dominance. "
     "Identify whether we are seeing signs of accumulation, distribution, or a potential reversal. "
     "Identify key sentiment shifts, periods of extreme greed or fear, and how they correlate with Bitcoin price movements."
+    "Identify whether capital is flowing into BTC or altcoins, and explain any major shifts. "
     "Do NOT just repeat numbers—provide clear insights backed by data.")
 ]
 

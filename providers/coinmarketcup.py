@@ -113,7 +113,7 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
 
     # Extract relevant Fear & Greed Index values
     historical_data = []
-    
+
     for entry in data:
         timestamp = entry.get("timestamp") 
         value = entry.get("value")
@@ -128,16 +128,52 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
 
     return {"fear_greed_history": historical_data}
 
+def fetch_altcoin_dominance(days: int = 30) -> dict:
+    """
+    Fetches historical altcoin dominance data by calculating Bitcoin dominance vs. total market cap.
+
+    :param days: Number of past days to retrieve the data for.
+    :return: A dictionary containing historical altcoin and BTC dominance trends.
+    """
+    url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/historical"
+    headers = {
+        "Accepts": "application/json",
+        "X-CMC_PRO_API_KEY": os.getenv("COINMARKETCAP_API_KEY")  # Ensure API key is set
+    }
+
+    # Define time range (from X days ago to now)
+    end_time = datetime.utcnow()
+    start_time = end_time - timedelta(days=days)
+
+    params = {
+        "time_start": start_time.isoformat(),
+        "time_end": end_time.isoformat(),
+        "interval": "1d"  # Daily intervals
+    }
+
+    response = requests.get(url, headers=headers, params=params)
+    response.raise_for_status()  # Raise an error if request fails
+    data = response.json().get("data", {}).get("quotes", [])
+
+    # Extract relevant Bitcoin & Altcoin dominance values
+    historical_data = []
+    for entry in data:
+        timestamp = entry.get("timestamp")
+        btc_dominance = entry.get("btc_dominance")
+        altcoin_dominance = 100 - btc_dominance  # Altcoin dominance is 100% - BTC dominance
+
+        # Convert timestamp from ISO format to readable date
+        date = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ").strftime("%Y-%m-%d")
+
+        historical_data.append({
+            "date": date,
+            "btc_dominance": btc_dominance,
+            "altcoin_dominance": altcoin_dominance
+        })
+
+    return {"altcoin_dominance_history": historical_data}
+
 
 if __name__ == "__main__":
-    # global_data = fetch_coinmarketcap_global_data()
-    # print("Global Market Data:")
-    # print(global_data)
-
-    # historical_data = fetch_coinmarketcap_historical_data(days=30)
-    # print("\nHistorical Market Data:")
-    # print(historical_data)
-
-    fear_greed_data = fetch_fear_greed_index(days=30)
-    print("\nFear & Greed Index Data:")
-    print(fear_greed_data)
+    data = fetch_altcoin_dominance()
+    print(data)

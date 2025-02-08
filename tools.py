@@ -5,7 +5,7 @@ from langchain.tools import StructuredTool
 from langchain.agents import Tool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 
-from providers.coinmarketcup import fetch_coinmarketcap_historical_data, fetch_fear_greed_index
+from providers.coinmarketcup import fetch_altcoin_dominance, fetch_coinmarketcap_historical_data, fetch_fear_greed_index
 
 search = GoogleSerperAPIWrapper()
 
@@ -17,6 +17,17 @@ coinmarketcap_historical_tool = StructuredTool.from_function(
         "This includes total market cap, 24h volume, Bitcoin dominance, and Ethereum dominance. "
         "Use this tool when analyzing long-term market trends and comparing current conditions to past cycles. "
         "Do NOT just list the data; instead, extract key insights like trends, reversals, or unusual movements."
+    )
+)
+
+altcoin_market_tool = StructuredTool.from_function(
+    fetch_altcoin_dominance,
+    name="altcoin_market_analysis",
+    description=(
+        "Fetches historical Bitcoin and altcoin dominance data from CoinMarketCap for a given number of past days. "
+        "This tool tracks capital flow trends—whether money is moving into Bitcoin (risk-off) or altcoins (risk-on). "
+        "Use this tool to detect altcoin seasons, Bitcoin dominance surges, and potential market shifts. "
+        "Do NOT just list the values—analyze the trend and explain its impact."
     )
 )
 
