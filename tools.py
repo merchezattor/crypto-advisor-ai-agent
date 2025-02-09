@@ -1,10 +1,10 @@
-from api_requests.analisys_requests import analyze_chart_data
 from api_requests.chart_request import fetch_chart_data_tool
 from langchain.tools import StructuredTool
 
 from langchain.agents import Tool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 
+from providers.binance import identify_patterns, perform_technical_analysis
 from providers.coinmarketcup import fetch_altcoin_dominance, fetch_coinmarketcap_historical_data, fetch_fear_greed_index
 
 search = GoogleSerperAPIWrapper()
@@ -43,13 +43,24 @@ binance_chart_tool = StructuredTool.from_function(
 )
 
 technical_analysis_tool = StructuredTool.from_function(
-    analyze_chart_data,
-    name="technical_analysis",  # Must match the allowed pattern (letters, numbers, underscores/hyphens)
+    perform_technical_analysis,
+    name="technical_analysis",
     description=(
-        "Fetch and analyze candlestick chart data from Binance for technical analysis. "
-        "Input should be a JSON object with the following keys: "
-        "`symbol` (e.g., BTCUSDT), `interval` (e.g., 1h, 4h), and `limit` (the number of candles to fetch, "
-        "which can also be provided as 'num_candles'). The tool returns a brief analysis including RSI and trend."
+        "Performs technical analysis on candlestick data, calculating indicators such as RSI, MACD, Moving Averages, "
+        "Bollinger Bands, and On-Balance Volume. "
+        "It identifies overbought/oversold conditions, trend momentum, and potential reversals. "
+        "Use this tool to analyze price action and generate trading insights."
+    )
+)
+
+pattern_recognition_tool = StructuredTool.from_function(
+    identify_patterns,
+    name="pattern_recognition",
+    description=(
+        "Detects technical chart patterns from historical candlestick data, including Double Top, Double Bottom, "
+        "Head and Shoulders, Inverse Head and Shoulders, Triangles, Flags, Wedges, Cup and Handle, "
+        "Triple Top, Triple Bottom, Diamond Patterns, and Rectangle Consolidation. "
+        "Use this tool to identify potential market reversals and breakout setups."
     )
 )
 

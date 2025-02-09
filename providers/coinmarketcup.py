@@ -11,6 +11,7 @@ def fetch_coinmarketcap_global_data() -> dict:
     Fetches global market data from CoinMarketCap.
     Returns a dictionary with total market cap, 24h volume, and BTC dominance.
     """
+    print("Fetching global market data from CoinMarketCap...")
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"
 
     headers = {
@@ -40,6 +41,7 @@ def fetch_coinmarketcap_historical_data(days: int = 30) -> dict:
     :param days: Number of past days to retrieve data for.
     :return: A dictionary with time-series data on market cap, volume, and BTC dominance.
     """
+    print("Fetching historical CoinMarketCap data...")
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/historical"
     headers = {
         "Accepts": "application/json",
@@ -91,6 +93,7 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
     :param days: Number of past days to retrieve the index for.
     :return: A dictionary containing the historical Fear & Greed Index values.
     """
+    print("Fetching Fear & Greed Index data...")
     url = "https://pro-api.coinmarketcap.com/v3/fear-and-greed/historical"
     headers = {
         "Accepts": "application/json",
@@ -135,6 +138,7 @@ def fetch_altcoin_dominance(days: int = 30) -> dict:
     :param days: Number of past days to retrieve the data for.
     :return: A dictionary containing historical altcoin and BTC dominance trends.
     """
+    print("Fetching altcoin dominance data...")
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/historical"
     headers = {
         "Accepts": "application/json",
@@ -172,7 +176,6 @@ def fetch_altcoin_dominance(days: int = 30) -> dict:
         })
 
     return {"altcoin_dominance_history": historical_data}
-
 
 if __name__ == "__main__":
     data = fetch_altcoin_dominance()
