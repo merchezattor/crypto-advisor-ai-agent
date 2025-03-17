@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
 """
-This script patches the pandas_ta package to fix the numpy NaN import issue.
-Run this script after installing pandas_ta to fix the compatibility issue with newer numpy versions.
+Patch utilities for fixing dependency issues.
+
+This module provides functions for patching external dependencies with known issues.
 """
 
 import os
@@ -9,7 +9,12 @@ import sys
 from pathlib import Path
 
 def find_pandas_ta_dir():
-    """Find the pandas_ta package directory."""
+    """
+    Find the pandas_ta package directory.
+    
+    Returns:
+        Path to the pandas_ta/momentum directory or None if not found
+    """
     for path in sys.path:
         momentum_dir = Path(path) / 'pandas_ta' / 'momentum'
         if momentum_dir.exists():
@@ -17,7 +22,14 @@ def find_pandas_ta_dir():
     return None
 
 def patch_squeeze_pro():
-    """Patch the squeeze_pro.py file to use numpy.nan instead of NaN."""
+    """
+    Patch the squeeze_pro.py file to use numpy.nan instead of NaN.
+    
+    This fixes a compatibility issue with newer versions of numpy.
+    
+    Returns:
+        True if the patch was applied successfully, False otherwise
+    """
     momentum_dir = find_pandas_ta_dir()
     if not momentum_dir:
         print("Could not find pandas_ta package directory.")

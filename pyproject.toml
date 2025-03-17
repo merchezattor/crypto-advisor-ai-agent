@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "lang-chain-ai-agent"
+name = "crypto-advisor"
 version = "0.1.0"
 description = "AI Agent for cryptocurrency market analysis"
 authors = ["Mikhail <mikhail.ukhin@gmail.com>"]
 readme = "README.md"
-packages = [{include = "api_requests"}, {include = "providers"}]
+packages = [{include = "crypto_advisor", from = "src"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
@@ -25,4 +25,5 @@ build-backend = "poetry.core.masonry.api"
 pytest = "^7.0.0"
 
 [tool.poetry.scripts]
-fix-pandas-ta = "patches.fix_pandas_ta:patch_squeeze_pro"
+fix-pandas-ta = "crypto_advisor.utils.patch:patch_squeeze_pro"
+crypto-advisor = "crypto_advisor.main:run_agent"

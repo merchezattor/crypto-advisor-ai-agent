@@ -1,3 +1,0 @@
-"""
-Patches for external dependencies.
-""" 

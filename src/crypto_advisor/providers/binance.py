@@ -1,3 +1,9 @@
+"""
+Binance API provider.
+
+This module provides functions for fetching and analyzing data from the Binance API.
+"""
+
 import requests
 import pandas as pd
 import ta
@@ -6,7 +12,17 @@ import pandas_ta as pta
 from datetime import datetime
 
 def fetch_binance_chart(symbol: str, interval: str = "1h", limit: int = 50):
-
+    """
+    Fetch candlestick data from Binance API.
+    
+    Args:
+        symbol: Trading pair symbol (e.g., 'BTCUSDT')
+        interval: Candlestick interval (e.g., '1h', '4h', '1d')
+        limit: Number of candles to fetch
+        
+    Returns:
+        List of dictionaries containing candlestick data
+    """
     print("Fetching Binance chart data...")
 
     url = "https://api.binance.com/api/v3/klines"
@@ -36,38 +52,51 @@ def fetch_binance_chart(symbol: str, interval: str = "1h", limit: int = 50):
     return candles
 
 def calculate_trend_indicators(df):
-    df["SMA_50"] = ta.sma(df["close"], length=50)  # 50-period SMA
-    df["EMA_20"] = ta.ema(df["close"], length=20)  # 20-period EMA
-    df["ADX"] = ta.adx(df["high"], df["low"], df["close"], length=14)["ADX_14"]  # ADX Trend Strength
+    """Calculate trend indicators for a DataFrame of candlestick data."""
+    df["SMA_50"] = ta.trend.sma_indicator(df["close"], window=50)  # 50-period SMA
+    df["EMA_20"] = ta.trend.ema_indicator(df["close"], window=20)  # 20-period EMA
+    df["ADX"] = ta.trend.adx(df["high"], df["low"], df["close"], window=14)  # ADX Trend Strength
     return df
 
 def calculate_momentum_indicators(df):
-    df["RSI"] = ta.rsi(df["close"], length=14)  # RSI with 14 periods
+    """Calculate momentum indicators for a DataFrame of candlestick data."""
+    df["RSI"] = ta.momentum.rsi(df["close"], window=14)  # RSI with 14 periods
     
     # Fix for Stochastic RSI: Extract specific columns
-    stoch_rsi = ta.stochrsi(df["close"], length=14)
+    stoch_rsi = pta.stochrsi(df["close"], length=14)
     df["Stoch_RSI_K"] = stoch_rsi["STOCHRSIk_14_14_3_3"]  # %K line
     df["Stoch_RSI_D"] = stoch_rsi["STOCHRSId_14_14_3_3"]  # %D line
     
-    macd = ta.macd(df["close"])
-    df["MACD"] = macd["MACD_12_26_9"]  # MACD main line
-    df["MACD_Signal"] = macd["MACDs_12_26_9"]  # MACD signal line
+    macd = ta.trend.macd(df["close"])
+    df["MACD"] = macd  # MACD main line
+    df["MACD_Signal"] = ta.trend.macd_signal(df["close"])  # MACD signal line
     return df
 
 def calculate_volatility_indicators(df):
-    bbands = ta.bbands(df["close"], length=20)
-    df["Bollinger_High"] = bbands["BBU_20_2.0"]  # Upper band
-    df["Bollinger_Low"] = bbands["BBL_20_2.0"]  # Lower band
-    df["ATR"] = ta.atr(df["high"], df["low"], df["close"], length=14)  # ATR for volatility
+    """Calculate volatility indicators for a DataFrame of candlestick data."""
+    indicator_bb = ta.volatility.BollingerBands(close=df["close"], window=20, window_dev=2)
+    df["Bollinger_High"] = indicator_bb.bollinger_hband()  # Upper band
+    df["Bollinger_Low"] = indicator_bb.bollinger_lband()  # Lower band
+    df["ATR"] = ta.volatility.average_true_range(df["high"], df["low"], df["close"], window=14)  # ATR for volatility
     return df
 
 def calculate_volume_indicators(df):
-    df["OBV"] = ta.obv(df["close"], df["volume"])  # On-Balance Volume
-    df["CMF"] = ta.cmf(df["high"], df["low"], df["close"], df["volume"], length=20)  # Chaikin Money Flow
-    df["VWAP"] = ta.vwap(df["high"], df["low"], df["close"], df["volume"])  # VWAP Indicator
+    """Calculate volume indicators for a DataFrame of candlestick data."""
+    df["OBV"] = ta.volume.on_balance_volume(df["close"], df["volume"])  # On-Balance Volume
+    df["CMF"] = ta.volume.chaikin_money_flow(df["high"], df["low"], df["close"], df["volume"], window=20)  # Chaikin Money Flow
+    df["VWAP"] = pta.vwap(df["high"], df["low"], df["close"], df["volume"])  # VWAP Indicator
     return df
 
 def perform_technical_analysis(candlestick_data: list) -> dict:
+    """
+    Perform technical analysis on candlestick data.
+    
+    Args:
+        candlestick_data: List of dictionaries containing candlestick data
+        
+    Returns:
+        Dictionary containing technical analysis results
+    """
     print("Performing technical analysis...")
     
     df = pd.DataFrame(candlestick_data)
@@ -86,18 +115,19 @@ def perform_technical_analysis(candlestick_data: list) -> dict:
         "latest_indicators": latest_data
     }
 
-def detect_selected_patterns(candlestick_data: list) -> pd.DataFrame:
+def detect_selected_patterns(candlestick_data: list) -> dict:
     """
-    Detects selected candlestick patterns in the given OHLCV data.
+    Detect selected candlestick patterns in the given OHLCV data.
 
-    :param candlestick_data: List of dictionaries with keys ['time', 'open', 'high', 'low', 'close', 'volume']
-    :return: DataFrame with new columns for each detected pattern.
+    Args:
+        candlestick_data: List of dictionaries with keys ['time', 'open', 'high', 'low', 'close', 'volume']
+        
+    Returns:
+        Dictionary containing detected patterns
     """
     df = pd.DataFrame(candlestick_data)
     df['time'] = pd.to_datetime(df['time'])
-
     df.set_index('time', inplace=True)
-
     df[['open', 'high', 'low', 'close', 'volume']] = df[['open', 'high', 'low', 'close', 'volume']].astype(float)
 
     selected_patterns = [
@@ -111,14 +141,10 @@ def detect_selected_patterns(candlestick_data: list) -> pd.DataFrame:
         '3blackcrows'
     ]
 
-
     pattern_map = {}
     
-    # print(pattern_df)
-
     for pattern in selected_patterns:
-
-        pattern_df = ta.cdl_pattern(
+        pattern_df = pta.cdl_pattern(
             open_=df['open'],
             high=df['high'],
             low=df['low'],
@@ -139,18 +165,4 @@ def detect_selected_patterns(candlestick_data: list) -> pd.DataFrame:
             if detected:
                 pattern_signals[pattern] = detected
 
-    return {"detected_patterns": pattern_signals}
-
-if __name__ == "__main__":
-    symbol = "ETHUSDT"
-    interval = "1h"
-    limit = 100
-
-    data = fetch_binance_chart(symbol, interval, limit)
-    ta_data = perform_technical_analysis(data)
-
-    print('Technical Analysis done')
-
-    pattern_data = detect_selected_patterns(data)
-
-    print(pattern_data)
+    return {"detected_patterns": pattern_signals} 
