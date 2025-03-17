@@ -5,7 +5,7 @@ This module handles requests for pattern recognition from candlestick data.
 """
 
 from crypto_advisor.api.models.patterns import PatternRecognitionRequest
-from crypto_advisor.providers.binance import detect_selected_patterns
+from crypto_advisor.services.ta_service import detect_selected_patterns
 
 def recognize_patterns_tool(request: PatternRecognitionRequest):
     """

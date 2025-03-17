@@ -5,7 +5,7 @@ This module handles requests for technical analysis of candlestick data.
 """
 
 from crypto_advisor.api.models.technical import TechnicalAnalysisRequest
-from crypto_advisor.providers.binance import perform_technical_analysis
+from crypto_advisor.services.ta_service import perform_technical_analysis
 
 def analyze_technical_data_tool(request: TechnicalAnalysisRequest):
     """

@@ -22,7 +22,7 @@ def load_environment():
 def create_llm():
     """Create and configure the language model."""
     return ChatOpenAI(
-        model="gpt-4o",
+        model="o3-mini",
         temperature=0,
         max_tokens=None,
         timeout=None,
