@@ -34,6 +34,7 @@ def get_all_tools():
         get_technical_analysis_tool(),
         get_pattern_recognition_tool(),
         get_fear_greed_index_tool(),
+        get_volatility_index_tool(),
         get_search_tool()
     ]
 
@@ -85,6 +86,22 @@ def get_technical_analysis_tool():
             "Performs technical analysis on candlestick data, calculating indicators such as RSI, Stochastic RSI, MACD, "
             "Moving Averages (SMA, EMA), Bollinger Bands, ATR, ADX, VWAP, and On-Balance Volume. "
             "This tool provides raw indicator values without predefined insights, allowing for flexible interpretation."
+        )
+    )
+
+def get_volatility_index_tool():
+    """Create and return the volatility index tool."""
+    from crypto_advisor.api.volatility import analyze_volatility_tool
+    
+    return StructuredTool.from_function(
+        analyze_volatility_tool,
+        name="volatility_index",
+        description=(
+            "Calculates a volatility index from 0-5 for a cryptocurrency based on candlestick data. "
+            "The index combines key volatility indicators: ATR (Average True Range), BBW (Bollinger Band Width), "
+            "and HV (Historical Volatility). Higher values indicate higher market volatility. "
+            "The tool also provides a volatility category (Very Low, Low, Moderate, High, Very High) "
+            "and the individual scores for each component indicator."
         )
     )
 

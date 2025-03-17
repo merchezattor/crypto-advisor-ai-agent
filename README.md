@@ -12,11 +12,13 @@ It can answer questions like:
 - *"Is BTC overbought or oversold based on technical indicators?"*
 - *"How has market sentiment changed in the last 60 days?"*
 - *"Are we in an accumulation or distribution phase?"*
+- *"How volatile is the market right now and what does it suggest for trading?"*
 
 ## 🛠️ Features & Capabilities
 - **📊 Technical Analysis** – RSI, MACD, Moving Averages, Trend Patterns
 - **📈 Market Trends** – BTC Dominance, Total Market Cap, Volume Movements
 - **📰 Sentiment Analysis** – Fear & Greed Index, Market Psychology Insights
+- **🔆 Volatility Analysis** – Volatility Index (0-5) using ATR, BBW, and HV indicators
 - **📅 Historical Analysis** – Compare past & present market conditions
 - **⚡ Real-Time Data** – Fetch live prices, trading volume, and liquidity metrics
 
@@ -63,6 +65,7 @@ It can answer questions like:
 - 📰 **News Sentiment Analysis** – Crypto news & Twitter data integration
 - 🏦 **On-Chain Metrics** – Whale activity, exchange inflows/outflows
 - 📈 **Multi-Coin Support** – Expanding analysis beyond BTC
+- 📊 **Volatility Alerts** – Automated notifications for unusual market volatility
 
 ---
 
