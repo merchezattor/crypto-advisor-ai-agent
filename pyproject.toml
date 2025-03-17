@@ -29,3 +29,5 @@ pytest = "^7.0.0"
 [tool.poetry.scripts]
 fix-pandas-ta = "crypto_advisor.utils.patch:patch_squeeze_pro"
 crypto-advisor = "crypto_advisor.main:run_agent"
+test = "pytest:main"
+test-all = "crypto_advisor.scripts.run_tests:run_all_tests"

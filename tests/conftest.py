@@ -4,12 +4,18 @@ Pytest configuration file.
 This file contains global fixtures and configuration for the test suite.
 """
 import pytest
+import warnings
 
+# Filter out warnings
 def pytest_configure(config):
-    """Register custom markers."""
+    """Register custom markers and configure warning filters."""
+    # Register custom markers
     config.addinivalue_line(
         "markers", "integration: mark a test as an integration test that requires external dependencies"
     )
+    
+    # Filter out specific warnings
+    warnings.filterwarnings("ignore", category=DeprecationWarning, message=".*pkg_resources is deprecated.*")
 
 def pytest_addoption(parser):
     """Add command-line options to pytest."""
