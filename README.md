@@ -61,6 +61,30 @@ It can answer questions like:
    poetry run python main.py
    ```
 
+### Running Tests
+
+The project includes both unit tests and integration tests:
+
+1. Run unit tests only:
+   ```bash
+   poetry run pytest
+   ```
+
+2. Run all tests including integration tests (requires internet connection for API access):
+   ```bash
+   poetry run pytest --run-integration
+   ```
+
+3. Run specific test files:
+   ```bash
+   poetry run pytest tests/test_volatility_index.py
+   ```
+
+4. Run with verbose output:
+   ```bash
+   poetry run pytest -xvs
+   ```
+
 ## 🚀 Future Plans
 - 📰 **News Sentiment Analysis** – Crypto news & Twitter data integration
 - 🏦 **On-Chain Metrics** – Whale activity, exchange inflows/outflows
