@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-os.environ["OPEN_AI_API_KEY"] = os.getenv('OPEN_AI_API_KEY')
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 os.environ["SERPER_API_KEY"] = os.getenv('SERPER_API_KEY')
 
 llm = ChatOpenAI(
@@ -57,16 +57,17 @@ messages = [
     "Do NOT just repeat numbers—provide clear, investor-focused insights backed by data.")
 ]
 
-## technical analysis
+# ## technical analysis
 # messages = [
 #     ("human", 
-#     "Fetch the last 50 1-hour candlesticks for ETHUSDT. "
+#     "Fetch the last 100 4-hour candlesticks for ETHUSDT. "
 #     "Perform a full technical analysis, including RSI, MACD, Moving Averages, Bollinger Bands, and Volume-based indicators. "
 #     "Additionally, detect any potential chart patterns such as Double Top, Head and Shoulders, Cup and Handle, or Triangles. "
 #     "Do NOT just list the values—analyze how these indicators interact and what they signal together. "
 #     "If conflicting signals appear, explain which indicator is more reliable in the current market. "
 #     "Summarize whether BTC is currently in a bullish, bearish, or uncertain phase based on the combined results. "
 #     "Provide a short-term market outlook, highlighting key levels to watch for breakouts or reversals."
+#     "Also give probability of bullish and bearhish scenarios."
 #     )
 # ]
 

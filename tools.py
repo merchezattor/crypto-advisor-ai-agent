@@ -4,7 +4,7 @@ from langchain.tools import StructuredTool
 from langchain.agents import Tool
 from langchain_community.utilities import GoogleSerperAPIWrapper
 
-from providers.binance import identify_patterns, perform_technical_analysis
+from providers.binance import detect_selected_patterns, perform_technical_analysis
 from providers.coinmarketcup import fetch_altcoin_dominance, fetch_coinmarketcap_historical_data, fetch_fear_greed_index
 
 search = GoogleSerperAPIWrapper()
@@ -46,21 +46,30 @@ technical_analysis_tool = StructuredTool.from_function(
     perform_technical_analysis,
     name="technical_analysis",
     description=(
-        "Performs technical analysis on candlestick data, calculating indicators such as RSI, MACD, Moving Averages, "
-        "Bollinger Bands, and On-Balance Volume. "
-        "It identifies overbought/oversold conditions, trend momentum, and potential reversals. "
-        "Use this tool to analyze price action and generate trading insights."
+        "Performs technical analysis on candlestick data, calculating indicators such as RSI, Stochastic RSI, MACD, "
+        "Moving Averages (SMA, EMA), Bollinger Bands, ATR, ADX, VWAP, and On-Balance Volume. "
+        "This tool provides raw indicator values without predefined insights, allowing for flexible interpretation."
     )
 )
 
 pattern_recognition_tool = StructuredTool.from_function(
-    identify_patterns,
+    detect_selected_patterns,
     name="pattern_recognition",
     description=(
-        "Detects technical chart patterns from historical candlestick data, including Double Top, Double Bottom, "
-        "Head and Shoulders, Inverse Head and Shoulders, Triangles, Flags, Wedges, Cup and Handle, "
-        "Triple Top, Triple Bottom, Diamond Patterns, and Rectangle Consolidation. "
-        "Use this tool to identify potential market reversals and breakout setups."
+        "Detects key candlestick patterns from OHLCV (Open, High, Low, Close, Volume) data. "
+        "The tool identifies both bullish and bearish patterns that can indicate trend reversals or continuations. "
+        "It detects the following patterns: "
+        "- **Doji**: Market indecision, potential reversal. "
+        "- **Hammer**: Bullish reversal, occurs at the bottom of a downtrend. "
+        "- **Hanging Man**: Bearish reversal, occurs at the top of an uptrend. "
+        "- **Engulfing** (Bullish/Bearish): A strong reversal pattern. "
+        "- **Morning Star**: Bullish reversal pattern in three candles. "
+        "- **Evening Star**: Bearish reversal pattern in three candles. "
+        "- **Three White Soldiers**: Strong bullish continuation signal. "
+        "- **Three Black Crows**: Strong bearish continuation signal. "
+        "The tool provides a structured response, indicating the detected patterns, timestamps, and signal strength. "
+        "Positive values indicate a bullish pattern, while negative values indicate a bearish pattern."
+        "Probabily of bearish and bullish scenarios should be provided."
     )
 )
 
