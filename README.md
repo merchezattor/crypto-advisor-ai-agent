@@ -54,7 +54,7 @@ It can answer questions like:
    poetry run fix-pandas-ta
    ```
 
-4. Create a `.env` file with your API keys (see `.env.example` for required keys)
+4. Create a `.env` file with your API keys (see `.env.example` for required keys). At minimum you'll need `OPENAI_API_KEY`, `COINMARKETCAP_API_KEY`, and `SERPER_API_KEY`.
 
 5. Run the agent:
    ```bash
