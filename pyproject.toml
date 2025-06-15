@@ -34,7 +34,7 @@ ruff = "^0.4.4"
 
 [tool.poetry.scripts]
 fix-pandas-ta = "crypto_advisor.utils.patch:patch_squeeze_pro"
-crypto-advisor = "crypto_advisor.main:run_agent"
+crypto-advisor = "crypto_advisor.cli:main"
 crypto-advisor-api = "crypto_advisor.server:run"
 test = "pytest:main"
 

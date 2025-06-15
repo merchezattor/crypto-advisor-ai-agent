@@ -10,11 +10,6 @@ from langchain_community.utilities import GoogleSerperAPIWrapper
 from crypto_advisor.api.chart import fetch_chart_data_tool
 from crypto_advisor.api.patterns import recognize_patterns_tool
 from crypto_advisor.api.technical import analyze_technical_data_tool
-from crypto_advisor.api.market import (
-    get_historical_market_data_tool, 
-    get_altcoin_dominance_tool, 
-    get_fear_greed_index_tool
-)
 
 def get_search_tool():
     """Create and return the web search tool."""
@@ -39,29 +34,36 @@ def get_all_tools():
     ]
 
 def get_coinmarketcap_historical_tool():
-    """Create and return the CoinMarketCap historical data tool."""
+    """Return historical market data tool accepting simple ``days`` param."""
+
+    def _hist(days: int = 30):  # noqa: WPS110
+        from crypto_advisor.api.market import get_historical_market_data_tool
+
+        from crypto_advisor.api.models.market import HistoricalMarketDataRequest
+
+        return get_historical_market_data_tool(HistoricalMarketDataRequest(days=days))
+
     return StructuredTool.from_function(
-        get_historical_market_data_tool,
+        _hist,
         name="coinmarketcap_historical",
         description=(
-            "Fetches historical global market data from CoinMarketCap for a given number of past days. "
-            "This includes total market cap, 24h volume, Bitcoin dominance, and Ethereum dominance. "
-            "Use this tool when analyzing long-term market trends and comparing current conditions to past cycles. "
-            "Do NOT just list the data; instead, extract key insights like trends, reversals, or unusual movements."
-        )
+            "Fetch historical global market data from CoinMarketCap. Accepts `days` (int)."
+        ),
     )
 
 def get_altcoin_market_tool():
-    """Create and return the altcoin market analysis tool."""
+    """Return altcoin dominance tool with simple ``days`` param."""
+
+    def _dom(days: int = 30):
+        from crypto_advisor.api.market import get_altcoin_dominance_tool
+        from crypto_advisor.api.models.market import AltcoinDominanceRequest
+
+        return get_altcoin_dominance_tool(AltcoinDominanceRequest(days=days))
+
     return StructuredTool.from_function(
-        get_altcoin_dominance_tool,
+        _dom,
         name="altcoin_market_analysis",
-        description=(
-            "Fetches historical Bitcoin and altcoin dominance data from CoinMarketCap for a given number of past days. "
-            "This tool tracks capital flow trends—whether money is moving into Bitcoin (risk-off) or altcoins (risk-on). "
-            "Use this tool to detect altcoin seasons, Bitcoin dominance surges, and potential market shifts. "
-            "Do NOT just list the values—analyze the trend and explain its impact."
-        )
+        description="Fetch Bitcoin vs altcoin dominance data. Accepts `days` (int).",
     )
 
 def get_binance_chart_tool():
@@ -137,13 +139,14 @@ def get_pattern_recognition_tool():
 def get_fear_greed_structured_tool():
     """Return Fear & Greed Index tool as a StructuredTool."""
 
+    def _fg(days: int = 30):
+        from crypto_advisor.api.market import get_fear_greed_index_tool
+        from crypto_advisor.api.models.market import FearGreedIndexRequest
+
+        return get_fear_greed_index_tool(FearGreedIndexRequest(days=days))
+
     return StructuredTool.from_function(
-        get_fear_greed_index_tool,  # imported from api.market at top
+        _fg,
         name="fear_greed_index",
-        description=(
-            "Fetches historical Fear & Greed Index data from CoinMarketCap for a given number of past days. "
-            "The index measures market sentiment on a scale from Extreme Fear to Extreme Greed. "
-            "Use this tool to analyze shifts in sentiment and predict potential market reversals. "
-            "Do NOT just list the values—identify patterns, major sentiment shifts, and anomalies."
-        ),
+        description="Fetch Fear & Greed Index data. Accepts `days` (int).",
     ) 
