@@ -4,7 +4,6 @@ Integration tests for the volatility index functionality.
 This module tests the volatility index calculation with real data from Binance.
 """
 import pytest
-from datetime import datetime
 
 # Import the necessary components
 from crypto_advisor.providers.binance import fetch_binance_chart
