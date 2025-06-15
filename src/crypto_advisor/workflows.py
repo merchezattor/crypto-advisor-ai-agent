@@ -24,10 +24,14 @@ from langchain_core.runnables import Runnable
 from langgraph.graph import END, StateGraph
 
 from crypto_advisor.agent import create_agent, load_environment
-from crypto_advisor.prompts import market_overview_query
-
 from crypto_advisor.providers.binance import fetch_binance_chart
 from crypto_advisor.services import ta_service
+
+from crypto_advisor.providers.coinmarketcap import (
+    fetch_coinmarketcap_global_data,
+    fetch_altcoin_dominance,
+    fetch_fear_greed_index,
+)
 
 
 class GraphState(TypedDict):
@@ -37,6 +41,9 @@ class GraphState(TypedDict):
     candles: list | None
     indicators: dict | None
     volatility: dict | None
+    global_data: dict | None
+    dominance: dict | None
+    sentiment: dict | None
 
 
 # ---------------------------------------------------------------------------
@@ -83,9 +90,48 @@ def _build_app(prompt_messages: List[tuple[str, str]]) -> Runnable[[Dict[str, An
     return graph.compile()
 
 
-def build_market_overview_app() -> Runnable[[Dict[str, Any]], Dict[str, Any]]:  # noqa: D103
+def build_market_overview_app(days: int = 60) -> Runnable[[Dict[str, Any]], Dict[str, Any]]:  # noqa: D103
     load_environment()
-    return _build_app(market_overview_query())
+
+    def seed(_: GraphState) -> GraphState:
+        prompt = (
+            "Provide a global market overview using the fetched metrics."
+        )
+        return {
+            "messages": [HumanMessage(content=prompt)],
+            "global_data": None,
+            "dominance": None,
+            "sentiment": None,
+            "candles": None,
+            "indicators": None,
+            "volatility": None,
+        }
+
+    def global_node(_: GraphState) -> GraphState:
+        return {"global_data": fetch_coinmarketcap_global_data()}
+
+    def dominance_node(_: GraphState) -> GraphState:
+        return {"dominance": fetch_altcoin_dominance(days)}
+
+    def sentiment_node(_: GraphState) -> GraphState:
+        return {"sentiment": fetch_fear_greed_index(days)}
+
+    agent_runnable = _build_agent_runnable()
+
+    graph: StateGraph[GraphState] = StateGraph(GraphState)
+    graph.add_node("seed", seed)
+    graph.add_node("global", global_node)
+    graph.add_node("dominance", dominance_node)
+    graph.add_node("sentiment", sentiment_node)
+    graph.add_node("agent", agent_runnable)
+
+    graph.add_edge("seed", "global")
+    graph.add_edge("global", "dominance")
+    graph.add_edge("dominance", "sentiment")
+    graph.add_edge("sentiment", "agent")
+    graph.add_edge("agent", END)
+
+    return graph.compile()
 
 
 def build_technical_analysis_app(symbol: str = "ETHUSDT") -> Runnable[[Dict[str, Any]], Dict[str, Any]]:  # noqa: D103
@@ -100,6 +146,9 @@ def build_technical_analysis_app(symbol: str = "ETHUSDT") -> Runnable[[Dict[str,
             "candles": None,
             "indicators": None,
             "volatility": None,
+            "global_data": None,
+            "dominance": None,
+            "sentiment": None,
         }
 
     def fetch(_: GraphState) -> GraphState:

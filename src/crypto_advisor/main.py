@@ -11,7 +11,7 @@ from crypto_advisor.workflows import (
 )
 from crypto_advisor import prompts as _prompts  # noqa: F401 – re-export convenience
 
-def run_agent(query_type="market_overview", custom_query=None, symbol: str = "ETHUSDT"):
+def run_agent(query_type="market_overview", custom_query=None, symbol: str = "ETHUSDT", days: int = 60):
     """
     Run the crypto advisor agent with the specified query.
     
@@ -19,6 +19,7 @@ def run_agent(query_type="market_overview", custom_query=None, symbol: str = "ET
         query_type: Type of predefined query to use ('market_overview' or 'technical_analysis')
         custom_query: A custom query to run instead of a predefined one
         symbol: The symbol for the technical analysis
+        days: The number of days for the market overview
         
     Returns:
         The agent's response
@@ -32,7 +33,7 @@ def run_agent(query_type="market_overview", custom_query=None, symbol: str = "ET
     if query_type == "technical_analysis":
         app = build_technical_analysis_app(symbol)
     else:
-        app = build_market_overview_app()
+        app = build_market_overview_app(days)
 
     result = app.invoke({})
     # The graph returns a dict with the final message list.  Extract the last

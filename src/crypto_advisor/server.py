@@ -43,9 +43,9 @@ async def _invoke_sync(app_callable, payload: dict[str, Any] | None = None) -> s
 
 
 @app.get("/market-overview", response_model=AdvisorResponse, tags=["analysis"])
-async def market_overview_endpoint() -> AdvisorResponse:  # noqa: D103
+async def market_overview_endpoint(days: int = 60) -> AdvisorResponse:  # noqa: D103
     try:
-        message = await _invoke_sync(build_market_overview_app())
+        message = await _invoke_sync(build_market_overview_app(days))
         return AdvisorResponse(message=message)
     except Exception as exc:  # pragma: no cover – runtime safeguard
         raise HTTPException(status_code=500, detail=str(exc)) from exc
