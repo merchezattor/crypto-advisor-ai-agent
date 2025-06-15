@@ -37,7 +37,6 @@ jobs:
         run: |
           poetry run pytest -q
 
-      # Uncomment the section below to include live integration tests
-      # - name: Run integration tests
-      #   run: |
-      #     poetry run pytest --run-integration -q 
+      - name: Run integration tests
+        run: |
+          poetry run pytest --run-integration -q 
