@@ -60,6 +60,19 @@ def test_calculate_volatility_index(sample_candlestick_data):
     
     # Validate category
     assert result["volatility_category"] in ["Very Low", "Low", "Moderate", "High", "Very High"]
+
+    # Ensure category matches the volatility_index value
+    if result["volatility_index"] < 1:
+        expected_category = "Very Low"
+    elif result["volatility_index"] < 2:
+        expected_category = "Low"
+    elif result["volatility_index"] < 3:
+        expected_category = "Moderate"
+    elif result["volatility_index"] < 4:
+        expected_category = "High"
+    else:
+        expected_category = "Very High"
+    assert result["volatility_category"] == expected_category
     
     # Validate that raw values are present
     assert all(key in result["raw_values"] for key in ["atr", "bbw", "hv"])
