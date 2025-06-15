@@ -1,15 +1,19 @@
-"""
-Binance API provider.
+"""Binance API provider.
 
-This module provides functions for fetching and analyzing data from the Binance API.
+This module provides functions for fetching candlestick data from the Binance
+API using the `python-binance` library.
 """
 
-import requests
 from datetime import datetime
 
+from binance.client import Client
+from binance.exceptions import BinanceAPIException
+
+
+client = Client(ping=False)
+
 def fetch_binance_chart(symbol: str, interval: str = "1h", limit: int = 50):
-    """
-    Fetch candlestick data from Binance API.
+    """Fetch candlestick data from Binance using `python-binance`.
     
     Args:
         symbol: Trading pair symbol (e.g., 'BTCUSDT')
@@ -21,15 +25,14 @@ def fetch_binance_chart(symbol: str, interval: str = "1h", limit: int = 50):
     """
     print("Fetching Binance chart data...")
 
-    url = "https://api.binance.com/api/v3/klines"
-    params = {
-        "symbol": symbol.upper(),
-        "interval": interval,
-        "limit": limit
-    }
-    
-    response = requests.get(url, params=params)
-    data = response.json()
+    try:
+        data = client.get_klines(
+            symbol=symbol.upper(),
+            interval=interval,
+            limit=limit,
+        )
+    except BinanceAPIException as exc:
+        raise RuntimeError(f"Failed to fetch data from Binance: {exc}") from exc
     
     candles = [
         {
@@ -38,7 +41,7 @@ def fetch_binance_chart(symbol: str, interval: str = "1h", limit: int = 50):
             "high": float(candle[2]),
             "low": float(candle[3]),
             "close": float(candle[4]),
-            "volume": float(candle[5])
+            "volume": float(candle[5]),
         }
         for candle in data
     ]
