@@ -34,8 +34,8 @@ load_environment()
 app = FastAPI(title="Crypto Advisor API", version="0.1.0")
 
 
-async def _invoke_sync(app_callable, payload: dict[str, Any] | None = None) -> str:  # noqa: D401,E501
-    """Run blocking LangGraph invocation in a worker thread."""
+async def _invoke_sync(app_callable, payload: dict[str, Any] | None = None) -> str:  # noqa: E501
+    """Run blocking LangGraph invocation in a thread."""
 
     payload = payload or {}
     result = await asyncio.to_thread(app_callable.invoke, payload)

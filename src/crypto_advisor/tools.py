@@ -134,8 +134,8 @@ def get_pattern_recognition_tool():
         )
     )
 
-def get_fear_greed_structured_tool():  # noqa: D401
-    """Return the Fear & Greed Index tool as a StructuredTool."""
+def get_fear_greed_structured_tool():
+    """Return Fear & Greed Index tool as a StructuredTool."""
 
     return StructuredTool.from_function(
         get_fear_greed_index_tool,  # imported from api.market at top

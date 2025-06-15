@@ -31,7 +31,7 @@ SYMBOL = "BTCUSDT"
 
 
 def _safe_fetch(symbol: str, interval: str, limit: int):  # noqa: D401
-    """Fetch kline data, but skip the test gracefully on network errors."""
+    """Fetch kline data and skip test on network errors."""
 
     try:
         return fetch_binance_chart(symbol, interval, limit)

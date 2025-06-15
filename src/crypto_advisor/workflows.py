@@ -65,7 +65,7 @@ def _build_app(prompt_messages: List[tuple[str, str]]) -> Runnable[[Dict[str, An
     """Internal helper to assemble a graph for a given seed prompt."""
 
     # Node 1 – seed the conversation with the predefined prompt.
-    def seed(_: GraphState) -> GraphState:  # noqa: D401
+    def seed(_: GraphState) -> GraphState:
         human_messages = [HumanMessage(content=msg) for _role, msg in prompt_messages]
         return {"messages": human_messages}
 
@@ -93,7 +93,7 @@ def build_technical_analysis_app(symbol: str = "ETHUSDT") -> Runnable[[Dict[str,
 
     load_environment()
 
-    def seed(_: GraphState) -> GraphState:  # noqa: D401
+    def seed(_: GraphState) -> GraphState:
         prompt = f"Perform full technical analysis for {symbol} pair to give insights for investor."
         return {
             "messages": [HumanMessage(content=prompt)],
@@ -102,15 +102,15 @@ def build_technical_analysis_app(symbol: str = "ETHUSDT") -> Runnable[[Dict[str,
             "volatility": None,
         }
 
-    def fetch(_: GraphState) -> GraphState:  # noqa: D401
+    def fetch(_: GraphState) -> GraphState:
         candles = fetch_binance_chart(symbol, "4h", 100)
         return {"candles": candles}
 
-    def calc_indicators(state: GraphState) -> GraphState:  # noqa: D401
+    def calc_indicators(state: GraphState) -> GraphState:
         indicators = ta_service.perform_technical_analysis(state["candles"])["latest_indicators"]  # type: ignore[index]
         return {"indicators": indicators}
 
-    def calc_vol(state: GraphState) -> GraphState:  # noqa: D401
+    def calc_vol(state: GraphState) -> GraphState:
         volatility = ta_service.calculate_volatility_index(state["candles"])
         return {"volatility": volatility}
 

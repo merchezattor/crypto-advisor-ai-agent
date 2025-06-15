@@ -11,7 +11,7 @@ __all__: list[str] = [
 
 
 def market_overview_query() -> List[Tuple[str, str]]:  # noqa: D401
-    """Return the market-overview seed prompt."""
+    """Return market-overview seed prompt."""
 
     return [
         (
@@ -33,8 +33,8 @@ def market_overview_query() -> List[Tuple[str, str]]:  # noqa: D401
     ]
 
 
-def technical_analysis_query() -> List[Tuple[str, str]]:  # noqa: D401
-    """Return the technical-analysis seed prompt for ETH/USDT."""
+def technical_analysis_query() -> List[Tuple[str, str]]:
+    """Return technical-analysis seed prompt for ETH/USDT."""
 
     return [
         (
