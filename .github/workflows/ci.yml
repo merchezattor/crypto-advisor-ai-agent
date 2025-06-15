@@ -27,7 +27,7 @@ jobs:
 
       - name: Install project dependencies
         run: |
-          poetry install --no-interaction --no-root
+          poetry install --no-interaction --sync
 
       - name: Lint with Ruff
         run: |
