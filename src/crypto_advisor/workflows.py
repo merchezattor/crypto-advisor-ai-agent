@@ -68,28 +68,6 @@ def _build_agent_runnable() -> Runnable[[GraphState], GraphState]:  # type: igno
 # ---------------------------------------------------------------------------
 
 
-def _build_app(prompt_messages: List[tuple[str, str]]) -> Runnable[[Dict[str, Any]], Dict[str, Any]]:  # noqa: E501
-    """Internal helper to assemble a graph for a given seed prompt."""
-
-    # Node 1 – seed the conversation with the predefined prompt.
-    def seed(_: GraphState) -> GraphState:
-        human_messages = [HumanMessage(content=msg) for _role, msg in prompt_messages]
-        return {"messages": human_messages}
-
-    # Create graph.
-    graph: StateGraph[GraphState] = StateGraph(GraphState)
-    graph.add_node("seed", seed)
-
-    # Agent node.
-    graph.add_node("agent", _build_agent_runnable())
-
-    # Linear flow: seed → agent → END.
-    graph.add_edge("seed", "agent")
-    graph.add_edge("agent", END)
-
-    return graph.compile()
-
-
 def build_market_overview_app(days: int = 60) -> Runnable[[Dict[str, Any]], Dict[str, Any]]:  # noqa: D103
     load_environment()
 
