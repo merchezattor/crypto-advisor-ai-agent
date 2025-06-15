@@ -85,7 +85,7 @@ def test_langchain_tool_integration() -> None:  # noqa: D103
         tool = get_volatility_index_tool()
         candles = _safe_fetch(SYMBOL, "1d", 30)
 
-        result = tool.func(TechnicalAnalysisRequest(candlestick_data=candles))
+        result = tool.run({"candlestick_data": candles})
 
         assert 0 <= result["volatility_index"] <= 5
     except ToolException as exc:  # pragma: no cover – runtime safety

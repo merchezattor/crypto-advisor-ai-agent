@@ -90,19 +90,25 @@ def get_technical_analysis_tool():
     )
 
 def get_volatility_index_tool():
-    """Create and return the volatility index tool."""
+    """Return the volatility index tool with a simple list parameter."""
+
+    from typing import List, Dict
     from crypto_advisor.api.volatility import analyze_volatility_tool
-    
+    from crypto_advisor.api.models.technical import TechnicalAnalysisRequest
+
+    def _volatility(candlestick_data: List[Dict]):  # type: ignore[valid-type]
+        """Wrapper forwarding raw candle data to the analyzer."""
+
+        req = TechnicalAnalysisRequest(candlestick_data=candlestick_data)
+        return analyze_volatility_tool(req)
+
     return StructuredTool.from_function(
-        analyze_volatility_tool,
+        _volatility,
         name="volatility_index",
         description=(
-            "Calculates a volatility index from 0-5 for a cryptocurrency based on candlestick data. "
-            "The index combines key volatility indicators: ATR (Average True Range), BBW (Bollinger Band Width), "
-            "and HV (Historical Volatility). Higher values indicate higher market volatility. "
-            "The tool also provides a volatility category (Very Low, Low, Moderate, High, Very High) "
-            "and the individual scores for each component indicator."
-        )
+            "Calculates a volatility index (0-5) from candlestick data using ATR, BBW, and HV. "
+            "Returns the index value, category label, and component scores."
+        ),
     )
 
 def get_pattern_recognition_tool():
