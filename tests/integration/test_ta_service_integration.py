@@ -19,11 +19,7 @@ from crypto_advisor.services.ta_service import calculate_volatility_index
 
 
 if TYPE_CHECKING:  # pragma: no cover – test-time only
-    from _pytest.capture import CaptureFixture
-    from _pytest.fixtures import FixtureRequest
-    from _pytest.logging import LogCaptureFixture
-    from _pytest.monkeypatch import MonkeyPatch
-    from pytest_mock.plugin import MockerFixture
+    pass
 
 
 # ---------------------------------------------------------------------------

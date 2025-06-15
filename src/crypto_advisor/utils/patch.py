@@ -4,7 +4,6 @@ Patch utilities for fixing dependency issues.
 This module provides functions for patching external dependencies with known issues.
 """
 
-import os
 import sys
 from pathlib import Path
 

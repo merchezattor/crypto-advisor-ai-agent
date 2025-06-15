@@ -33,7 +33,7 @@ def get_all_tools():
         get_binance_chart_tool(),
         get_technical_analysis_tool(),
         get_pattern_recognition_tool(),
-        get_fear_greed_index_tool(),
+        get_fear_greed_structured_tool(),
         get_volatility_index_tool(),
         get_search_tool()
     ]
@@ -128,15 +128,16 @@ def get_pattern_recognition_tool():
         )
     )
 
-def get_fear_greed_index_tool():
-    """Create and return the fear and greed index tool."""
+def get_fear_greed_structured_tool():  # noqa: D401
+    """Return the Fear & Greed Index tool as a StructuredTool."""
+
     return StructuredTool.from_function(
-        get_fear_greed_index_tool,
+        get_fear_greed_index_tool,  # imported from api.market at top
         name="fear_greed_index",
         description=(
             "Fetches historical Fear & Greed Index data from CoinMarketCap for a given number of past days. "
             "The index measures market sentiment on a scale from Extreme Fear to Extreme Greed. "
             "Use this tool to analyze shifts in sentiment and predict potential market reversals. "
             "Do NOT just list the values—identify patterns, major sentiment shifts, and anomalies."
-        )
+        ),
     ) 

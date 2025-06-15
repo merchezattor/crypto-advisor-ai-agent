@@ -8,8 +8,6 @@ import os
 import requests
 from datetime import datetime, timedelta
 
-from dotenv import load_dotenv
-
 def fetch_coinmarketcap_global_data() -> dict:
     """
     Fetches global market data from CoinMarketCap.
@@ -50,12 +48,12 @@ def fetch_coinmarketcap_historical_data(days: int = 30) -> dict:
     print("Fetching historical CoinMarketCap data...")
     
     end_date = datetime.now()
-    start_date = end_date - timedelta(days=days)
+    _start_date = end_date - timedelta(days=days)  # noqa: WPS122 – local debug variable
     
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/historical"
     
     params = {
-        "time_start": start_date.isoformat(),
+        "time_start": _start_date.isoformat(),
         "time_end": end_date.isoformat(),
         "interval": "1d"  # daily data
     }
@@ -113,9 +111,6 @@ def fetch_fear_greed_index(days: int = 30) -> dict:
         Dictionary containing fear and greed index data
     """
     print("Fetching Fear & Greed Index data...")
-    
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=days)
     
     url = "https://api.alternative.me/fng/"
     
