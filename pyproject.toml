@@ -18,6 +18,8 @@ pandas = "^2.0.0"
 pandas-ta = "^0.3.14b"
 ta = "^0.10.2"
 setuptools = "^68.0.0"
+langgraph = "^0.0.36"
+langchain-core = "^0.1.40"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
