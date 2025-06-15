@@ -52,9 +52,9 @@ async def market_overview_endpoint() -> AdvisorResponse:  # noqa: D103
 
 
 @app.get("/technical-analysis", response_model=AdvisorResponse, tags=["analysis"])
-async def technical_analysis_endpoint() -> AdvisorResponse:  # noqa: D103
+async def technical_analysis_endpoint(symbol: str = "ETHUSDT") -> AdvisorResponse:  # noqa: D103
     try:
-        message = await _invoke_sync(build_technical_analysis_app())
+        message = await _invoke_sync(build_technical_analysis_app(symbol))
         return AdvisorResponse(message=message)
     except Exception as exc:  # pragma: no cover
         raise HTTPException(status_code=500, detail=str(exc)) from exc
