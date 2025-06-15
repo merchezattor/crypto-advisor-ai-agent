@@ -11,9 +11,9 @@ from crypto_advisor.api.chart import fetch_chart_data_tool
 from crypto_advisor.api.patterns import recognize_patterns_tool
 from crypto_advisor.api.technical import analyze_technical_data_tool
 from crypto_advisor.api.market import (
-    get_historical_market_data_tool, 
-    get_altcoin_dominance_tool, 
-    get_fear_greed_index_tool
+    get_historical_market_data_tool,
+    get_altcoin_dominance_tool,
+    get_fear_greed_index_tool as api_fear_greed_index_tool,
 )
 
 def get_search_tool():
@@ -131,7 +131,7 @@ def get_pattern_recognition_tool():
 def get_fear_greed_index_tool():
     """Create and return the fear and greed index tool."""
     return StructuredTool.from_function(
-        get_fear_greed_index_tool,
+        api_fear_greed_index_tool,
         name="fear_greed_index",
         description=(
             "Fetches historical Fear & Greed Index data from CoinMarketCap for a given number of past days. "
@@ -139,4 +139,4 @@ def get_fear_greed_index_tool():
             "Use this tool to analyze shifts in sentiment and predict potential market reversals. "
             "Do NOT just list the values—identify patterns, major sentiment shifts, and anomalies."
         )
-    ) 
+    )
