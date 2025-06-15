@@ -63,24 +63,24 @@ It can answer questions like:
 
 ### Running Tests
 
-The project includes both unit tests and integration tests:
+Unit and integration tests are managed with **pytest**:
 
 1. Run unit tests only:
    ```bash
    poetry run pytest
    ```
 
-2. Run all tests including integration tests (requires internet connection for API access):
+2. Include integration tests that hit external services:
    ```bash
    poetry run pytest --run-integration
    ```
 
-3. Run specific test files:
+3. Run a specific test module:
    ```bash
    poetry run pytest tests/test_volatility_index.py
    ```
 
-4. Run with verbose output:
+4. Show verbose output and stop on first failure:
    ```bash
    poetry run pytest -xvs
    ```
