@@ -9,7 +9,6 @@ from crypto_advisor.workflows import (
     build_market_overview_app,
     build_technical_analysis_app,
 )
-from crypto_advisor import prompts as _prompts  # noqa: F401 – re-export convenience
 
 def run_agent(query_type="market_overview", custom_query=None, symbol: str = "ETHUSDT", days: int = 60):
     """
