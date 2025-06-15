@@ -36,7 +36,4 @@ def run_agent(query_type="market_overview", custom_query=None):
     result = app.invoke({})
     # The graph returns a dict with the final message list.  Extract the last
     # AI message content for CLI use.
-    return result["messages"][-1].content
-
-if __name__ == "__main__":
-    run_agent() 
+    return result["messages"][-1].content 
