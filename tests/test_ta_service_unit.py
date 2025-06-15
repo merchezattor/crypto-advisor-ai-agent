@@ -8,7 +8,7 @@ quickly and without external dependencies.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Dict, List
 
 import pandas as pd
@@ -42,7 +42,7 @@ def sample_candlestick_data() -> List[Dict[str, float | str]]:  # noqa: WPS231
     """
 
     candles: List[Dict[str, float | str]] = []
-    base_time = datetime.utcnow()
+    base_time = datetime.now(timezone.utc)
     close_price = 1_000.0
 
     for i in range(100):
@@ -56,7 +56,7 @@ def sample_candlestick_data() -> List[Dict[str, float | str]]:  # noqa: WPS231
 
         candles.append(
             {
-                "time": (base_time - timedelta(minutes=15 * i)).isoformat(),
+                "time": (base_time - timedelta(minutes=15 * i)).replace(tzinfo=None).isoformat(),
                 "open": open_price,
                 "high": high_price,
                 "low": low_price,
