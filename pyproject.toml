@@ -12,7 +12,6 @@ langchain = ">=0.0.312"
 langchain-openai = ">=0.0.2"
 langchain-community = ">=0.0.13"
 python-dotenv = "^1.0.0"
-# Additional dependencies identified from codebase
 requests = "^2.28.0"
 pandas = "^2.0.0"
 pandas-ta = "^0.3.14b"
@@ -43,3 +42,16 @@ line-length = 120
 
 [tool.ruff.lint]
 ignore = ["E402"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+
+markers = [
+    "integration: tests that require external services",
+]
+
+filterwarnings = [
+    "ignore::DeprecationWarning:pandas_ta.*:",
+    "ignore::UserWarning:.*pydantic.*:",
+    "ignore::DeprecationWarning:.*pydantic.*:",
+]
